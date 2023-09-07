@@ -49,7 +49,7 @@ app.post("/restrict", (req, res) => {
      Productivity Tracker Support Team.</p>`;
 
   const composeEmail = {
-    from: "productivitytrackerextension@gmail.com",
+    from: "Productivity Tracker Extension <productivitytrackerextension@gmail.com>",
     to: email,
     subject: "Blocked Site Access Alert",
     html: info,
@@ -77,7 +77,7 @@ app.post("/disabled", (req, res) => {
   `;
 
   const composeEmail = {
-    from: "productivitytrackerextension@gmail.com",
+    from: "Productivity Tracker Extension <productivitytrackerextension@gmail.com>",
     to: email,
     subject: "Productivity Tracker Extension Enabled",
     html: info,
@@ -93,7 +93,6 @@ app.post("/disabled", (req, res) => {
 app.post("/send-otp", (req, res) => {
   const { otp, email } = req.body;
 
-
   if (!otp || !email) return res.status(400).send("Bad Request");
 
   const info = `<p>Dear User,</p>
@@ -104,8 +103,7 @@ app.post("/send-otp", (req, res) => {
   `;
 
   const composeEmail = {
-    from: "productivitytrackerextension@gmail.com",
-    name: "Productivity Tracker Extension",
+    from: "Productivity Tracker Extension <productivitytrackerextension@gmail.com>",
     to: email,
     subject: "Reset PIN",
     html: info,
