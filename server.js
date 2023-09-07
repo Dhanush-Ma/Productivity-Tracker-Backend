@@ -40,6 +40,9 @@ app.post("/restrict", (req, res) => {
 
   const formattedDateTime = getFormattedDateAndTime(timestamp);
 
+  console.log("Timestamp: ", timestamp);
+  console.log("Formatted Timestamp: ",formattedDateTime);
+
   const info = `<p>Dear User,</p>
     <p>We hope this email finds you well. We wanted to inform you that a site that was previously blocked has been accessed from your account. The details can be found below.</p>
   
