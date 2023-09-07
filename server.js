@@ -35,6 +35,8 @@ function getFormattedDateAndTime(timestamp) {
 app.post("/restrict", (req, res) => {
   const { siteName, timestamp, email } = req.body;
 
+  if (!siteName || !timestamp || !email) return res.status(400).send("Bad Request");
+
   const formattedDateTime = getFormattedDateAndTime(timestamp);
 
   const info = `<p>Dear User,</p>
@@ -61,6 +63,8 @@ app.post("/restrict", (req, res) => {
 
 app.post("/disabled", (req, res) => {
   const { timestamp, email } = req.body;
+
+  if (!timestamp || !email) return res.status(400).send("Bad Request");
 
   const formattedDateTime = getFormattedDateAndTime(timestamp);
 
