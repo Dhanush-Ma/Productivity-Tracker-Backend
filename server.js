@@ -35,7 +35,8 @@ function getFormattedDateAndTime(timestamp) {
 app.post("/restrict", (req, res) => {
   const { siteName, timestamp, email } = req.body;
 
-  if (!siteName || !timestamp || !email) return res.status(400).send("Bad Request");
+  if (!siteName || !timestamp || !email)
+    return res.status(400).send("Bad Request");
 
   const formattedDateTime = getFormattedDateAndTime(timestamp);
 
@@ -79,6 +80,34 @@ app.post("/disabled", (req, res) => {
     from: "productivitytrackerextension@gmail.com",
     to: email,
     subject: "Productivity Tracker Extension Enabled",
+    html: info,
+  };
+
+  sender.sendMail(composeEmail, (err, info) => {
+    if (err) console.log(err);
+  });
+
+  res.status(200).send("OK");
+});
+
+app.post("/send-otp", (req, res) => {
+  const { otp, email } = req.body;
+
+
+  if (!otp || !email) return res.status(400).send("Bad Request");
+
+  const info = `<p>Dear User,</p>
+    <p>The One-Time-Pasword to reset the the account PIN is:  <b>${otp}</b></p>
+  
+     <p>Best regards,<br/>
+     Productivity Tracker Support Team.</p>
+  `;
+
+  const composeEmail = {
+    from: "productivitytrackerextension@gmail.com",
+    name: "Productivity Tracker Extension",
+    to: email,
+    subject: "Reset PIN",
     html: info,
   };
 
