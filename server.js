@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -18,12 +19,32 @@ const sender = nodemailer.createTransport({
   },
 });
 
-
-app.post("/restrict", (req, res) => {
+app.post("/restrict", async (req, res) => {
   const { siteName, timestamp, email } = req.body;
 
   if (!siteName || !timestamp || !email)
     return res.status(400).send("Bad Request");
+
+  const auth = new google.auth.GoogleAuth({
+    keyFile: process.env.SHEET_CREDENTIALS,
+    scopes: "https://www.googleapis.com/auth/spreadsheets",
+  });
+
+  const client = await auth.getClient();
+
+  const googleSheets = google.sheets({ version: "v4", auth: client });
+
+  const spreadsheetId = process.env.SHEET_ID;
+
+  await googleSheets.spreadsheets.values.append({
+    auth,
+    spreadsheetId,
+    range: "Sheet1!A:C",
+    valueInputOption: "RAW",
+    resource: {
+      values: [[email, siteName, timestamp]],
+    },
+  });
 
   const info = `<p>Dear User,</p>
     <p>We hope this email finds you well. We wanted to inform you that a site that was previously blocked has been accessed from your account. The details can be found below.</p>
