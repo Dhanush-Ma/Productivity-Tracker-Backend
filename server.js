@@ -25,8 +25,6 @@ app.post("/restrict", (req, res) => {
   if (!siteName || !timestamp || !email)
     return res.status(400).send("Bad Request");
 
-  console.log("Timestamp: ", timestamp);
-
   const info = `<p>Dear User,</p>
     <p>We hope this email finds you well. We wanted to inform you that a site that was previously blocked has been accessed from your account. The details can be found below.</p>
   
@@ -54,10 +52,8 @@ app.post("/disabled", (req, res) => {
 
   if (!timestamp || !email) return res.status(400).send("Bad Request");
 
-  const formattedDateTime = getFormattedDateAndTime(timestamp);
-
   const info = `<p>Dear User,</p>
-    <p>The Productivity Tracker Chrome extension has been re-enabled as of <b>${formattedDateTime}</b></p>
+    <p>The Productivity Tracker Chrome extension has been re-enabled as of <b>${timestamp}</b></p>
   
   <p>Best regards,<br/>
      Productivity Tracker Support Team.</p>
