@@ -18,19 +18,6 @@ const sender = nodemailer.createTransport({
   },
 });
 
-function getFormattedDateAndTime(timestamp) {
-  const options = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  };
-
-  const dateTime = new Date(timestamp);
-  return dateTime.toLocaleString("en-US", options);
-}
 
 app.post("/restrict", (req, res) => {
   const { siteName, timestamp, email } = req.body;
@@ -38,16 +25,13 @@ app.post("/restrict", (req, res) => {
   if (!siteName || !timestamp || !email)
     return res.status(400).send("Bad Request");
 
-  const formattedDateTime = getFormattedDateAndTime(timestamp);
-
   console.log("Timestamp: ", timestamp);
-  console.log("Formatted Timestamp: ",formattedDateTime);
 
   const info = `<p>Dear User,</p>
     <p>We hope this email finds you well. We wanted to inform you that a site that was previously blocked has been accessed from your account. The details can be found below.</p>
   
   <p>Site Name: ${siteName}<br />
-  Access Time: <b>${formattedDateTime}</b></p>
+  Access Time: <b>${timestamp}</b></p>
   <p>Best regards,<br/>
      Productivity Tracker Support Team.</p>`;
 
