@@ -120,6 +120,35 @@ app.post("/send-otp", (req, res) => {
   res.status(200).send("OK");
 });
 
+app.post("/users", async (req, res) => {
+  const { timestamp, email } = req.body;
+
+  if (!timestamp || !email) return res.status(400).send("Bad Request");
+
+  const auth = new google.auth.GoogleAuth({
+    keyFile: process.env.SHEET_CREDENTIALS,
+    scopes: "https://www.googleapis.com/auth/spreadsheets",
+  });
+
+  const client = await auth.getClient();
+
+  const googleSheets = google.sheets({ version: "v4", auth: client });
+
+  const spreadsheetId = process.env.SHEET_ID;
+
+  await googleSheets.spreadsheets.values.append({
+    auth,
+    spreadsheetId,
+    range: "Sheet2!A:B",
+    valueInputOption: "RAW",
+    resource: {
+      values: [[email, timestamp]],
+    },
+  });
+
+  res.status(200).send("OK");
+});
+
 const PORT = process.env.PORT || 8055;
 app.listen(PORT, () => {
   console.log(`Server is listening on port: ${PORT}`);
